@@ -1,30 +1,37 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package calcugui;
 
-/**
- *
- * @author Jia Maris P. Samonte
- */
-import java.awt.Desktop;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 public class calcuGUI extends javax.swing.JFrame {
 
     /**
      * Creates new form calcuGUI
      */
+    
+    JFileChooser chooser;
+    String choosertitle = null;
+    String str;
+    
     public calcuGUI() {
         initComponents();
+        
+        jTextArea1.setEditable(false);
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setWrapStyleWord(true);
+        
+        jTextArea2.setEditable(true);
+        jTextArea2.setLineWrap(true);
+        jTextArea2.setWrapStyleWord(true);
+        
     }
 
     /**
@@ -132,22 +139,29 @@ public class calcuGUI extends javax.swing.JFrame {
 
     private void loadfilebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadfilebuttonActionPerformed
         // TODO add your handling code here:
-        JFileChooser chooseFile = new JFileChooser();
-        chooseFile.getSelectedFile();
-        File mewmew = new File ("C:\\Users\\Jia Maris P. Samonte\\Desktop\\algebra.txt");
+
+        jTextArea2.setText("");
+        chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        chooser.showOpenDialog(this);
+      
         try {
-            FileReader reader = new FileReader( mewmew);
-             BufferedReader br = new BufferedReader(reader);
-                    String str;
+                FileReader reader = new FileReader( chooser.getSelectedFile());
+                BufferedReader br = new BufferedReader(reader);
+                String str;
                     while ((str = br.readLine()) != null) {
-                        jTextArea2.append("" + str);
+                        jTextArea2.append(str + "\n\n\n");
                         }        
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(calcuGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(calcuGUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(calcuGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(calcuGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        
     }//GEN-LAST:event_loadfilebuttonActionPerformed
+    
+   
 
     /**
      * @param args the command line arguments
@@ -177,10 +191,8 @@ public class calcuGUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new calcuGUI().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new calcuGUI().setVisible(true);
         });
     }
 
@@ -194,4 +206,119 @@ public class calcuGUI extends javax.swing.JFrame {
     private javax.swing.JButton loadfilebutton;
     private javax.swing.JButton processbutton1;
     // End of variables declaration//GEN-END:variables
+    
+    
+    // All Functions
+    public static int getPreference(char c){
+        switch (c) {
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            default:
+                return -1;
+        }
+    }
+    public static int calculatePostFix(List<String> postFixList){
+        Stack<Integer> stack = new Stack<>();
+        for(int i=0;i<postFixList.size();i++){
+            String word = postFixList.get(i);
+            if(word.length()==1 && (word.charAt(0)=='+'||word.charAt(0)=='-'||word.charAt(0)=='*'||word.charAt(0)=='/')){
+                int number2 = stack.pop();
+                int number1 = stack.pop();
+                switch (word.charAt(0)) {
+                    case '+':
+                        {
+                            int number = number1+number2;
+                            stack.push(number);
+                            break;
+                        }
+                    case '-':
+                        {
+                            int number = number1-number2;
+                            stack.push(number);
+                            break;
+                        }
+                    case '*':
+                        {
+                            int number = number1*number2;
+                            stack.push(number);
+                            break;
+                        }
+                    default:
+                        {
+                            int number = number1/number2;
+                            stack.push(number);
+                            break;
+                        }
+                }
+            }else{
+                int number = Integer.parseInt(word);
+                stack.push(number);
+            }
+        }
+        return stack.peek();
+    }
+    public static List<String> getPostFixString(String s){
+        Stack<Character> stack = new Stack<>();
+        List<String> postFixList = new ArrayList<>();
+        boolean flag = false;
+        for(int i=0;i<s.length();i++){
+            char word = s.charAt(i);
+            if(word==' ' || word=='\t'){
+                continue;
+            }
+            switch (word) {
+                case '(':
+                    stack.push(word);
+                    flag = false;
+                    break;
+                case ')':
+                    flag = false;
+                    while(!stack.isEmpty()){
+                        if(stack.peek()=='('){
+                            stack.pop();
+                            break;
+                        }else{
+                            postFixList.add(stack.pop()+"");
+                        }
+                    }   break;
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                    flag = false;
+                    if(stack.isEmpty()){
+                        stack.push(word);
+                    }
+                    else{
+                        while(!stack.isEmpty() && getPreference(stack.peek())>=getPreference(word)){
+                            postFixList.add(stack.pop()+"");
+                        }
+                        stack.push(word);
+                    }   break;
+                default:
+                    if(flag){
+                        String lastNumber = postFixList.get(postFixList.size()-1);
+                        lastNumber+=word;
+                        postFixList.set(postFixList.size()-1, lastNumber);
+                    }else
+                        postFixList.add(word+"");
+                    flag = true;
+                    break;
+            }
+        }
+        while(!stack.isEmpty()){
+            postFixList.add(stack.pop()+"");
+        }
+        return postFixList;
+    }
+    public static int calculate(String s) {
+        List<String> postFixString = getPostFixString(s);
+        return calculatePostFix(postFixString);
+    }
 }
+
+
