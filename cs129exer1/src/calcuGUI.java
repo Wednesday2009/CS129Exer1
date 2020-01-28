@@ -18,8 +18,6 @@ public class calcuGUI extends javax.swing.JFrame {
      */
     
     JFileChooser chooser;
-    String choosertitle = null;
-    String str;
     
     public calcuGUI() {
         initComponents();
@@ -147,7 +145,7 @@ public class calcuGUI extends javax.swing.JFrame {
         chooser.showOpenDialog(this);
       
         try {
-                FileReader reader = new FileReader( chooser.getSelectedFile());
+                FileReader reader = new FileReader(chooser.getSelectedFile());
                 BufferedReader br = new BufferedReader(reader);
                 String str;
                     while ((str = br.readLine()) != null) {
