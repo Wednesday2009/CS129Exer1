@@ -76,22 +76,23 @@ public class calcuGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 153));
+        jPanel2.setBackground(new java.awt.Color(204, 0, 204));
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        processTA.setBackground(new java.awt.Color(153, 255, 255));
+        processTA.setBackground(new java.awt.Color(255, 255, 102));
         processTA.setColumns(20);
         processTA.setRows(5);
         processTA.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jScrollPane1.setViewportView(processTA);
 
-        loadTA.setBackground(new java.awt.Color(204, 255, 255));
+        loadTA.setBackground(new java.awt.Color(255, 255, 102));
         loadTA.setColumns(20);
         loadTA.setRows(5);
         loadTA.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         loadTA.setRequestFocusEnabled(false);
         jScrollPane2.setViewportView(loadTA);
 
+        loadfilebutton.setBackground(new java.awt.Color(204, 204, 204));
         loadfilebutton.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         loadfilebutton.setText("Load File");
         loadfilebutton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -101,6 +102,7 @@ public class calcuGUI extends javax.swing.JFrame {
             }
         });
 
+        processbtn.setBackground(new java.awt.Color(204, 204, 204));
         processbtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         processbtn.setText("Process");
         processbtn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -110,6 +112,7 @@ public class calcuGUI extends javax.swing.JFrame {
             }
         });
 
+        TFadder.setBackground(new java.awt.Color(255, 255, 102));
         TFadder.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         TFadder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -117,6 +120,7 @@ public class calcuGUI extends javax.swing.JFrame {
             }
         });
 
+        adderBT.setBackground(new java.awt.Color(204, 204, 204));
         adderBT.setText("ADD");
         adderBT.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         adderBT.addActionListener(new java.awt.event.ActionListener() {
@@ -125,6 +129,7 @@ public class calcuGUI extends javax.swing.JFrame {
             }
         });
 
+        clearTA.setBackground(new java.awt.Color(204, 204, 204));
         clearTA.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         clearTA.setText("Clear table");
         clearTA.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -270,9 +275,6 @@ public class calcuGUI extends javax.swing.JFrame {
                } catch (IOException ex) {
             Logger.getLogger(calcuGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-               
-               
-               
                
     }//GEN-LAST:event_processbtnActionPerformed
 
