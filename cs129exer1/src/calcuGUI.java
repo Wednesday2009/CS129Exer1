@@ -16,6 +16,7 @@ public class calcuGUI extends javax.swing.JFrame {
     /**
      * Creates new form calcuGUI
      */
+    
     JFileChooser chooser;
     
     public calcuGUI() {
