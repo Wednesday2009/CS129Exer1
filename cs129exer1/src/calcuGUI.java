@@ -133,7 +133,6 @@ public class calcuGUI extends javax.swing.JFrame {
     private void loadfilebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadfilebuttonActionPerformed
         // TODO add your handling code here:
         JFileChooser chooseFile = new JFileChooser();
-        chooseFile.getSelectedFile();
         File mewmew = new File ("C:\\Users\\Jia Maris P. Samonte\\Desktop\\algebra.txt");
         try {
             FileReader reader = new FileReader( mewmew);
