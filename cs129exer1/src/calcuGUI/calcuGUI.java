@@ -1,8 +1,10 @@
-package calcugui;
+package calcuGUI;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,6 +12,7 @@ import javax.swing.JFileChooser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import javax.swing.JTextArea;
 
 public class calcuGUI extends javax.swing.JFrame {
 
@@ -18,17 +21,25 @@ public class calcuGUI extends javax.swing.JFrame {
      */
     
     JFileChooser chooser;
+    ArrayList Stringz = new ArrayList<>();
+
     
     public calcuGUI() {
         initComponents();
         
-        jTextArea1.setEditable(false);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setWrapStyleWord(true);
+        processTA.setEditable(false);
+        processTA.setLineWrap(true);
+        processTA.setWrapStyleWord(true);
         
-        jTextArea2.setEditable(true);
-        jTextArea2.setLineWrap(true);
-        jTextArea2.setWrapStyleWord(true);
+        
+        loadTA.setEditable(false);
+        loadTA.setLineWrap(true);
+        loadTA.setWrapStyleWord(true);
+        
+        processbtn.setEnabled(false);
+        
+        
+     
         
     }
 
@@ -44,11 +55,14 @@ public class calcuGUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        processTA = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        loadTA = new javax.swing.JTextArea();
         loadfilebutton = new javax.swing.JButton();
-        processbutton1 = new javax.swing.JButton();
+        processbtn = new javax.swing.JButton();
+        TFadder = new javax.swing.JTextField();
+        adderBT = new javax.swing.JButton();
+        clearTA = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -63,62 +77,119 @@ public class calcuGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jScrollPane1.setViewportView(jTextArea1);
+        jPanel2.setBackground(new java.awt.Color(255, 255, 153));
+        jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jTextArea2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jScrollPane2.setViewportView(jTextArea2);
+        processTA.setBackground(new java.awt.Color(153, 255, 255));
+        processTA.setColumns(20);
+        processTA.setRows(5);
+        processTA.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jScrollPane1.setViewportView(processTA);
+
+        loadTA.setBackground(new java.awt.Color(204, 255, 255));
+        loadTA.setColumns(20);
+        loadTA.setRows(5);
+        loadTA.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        loadTA.setRequestFocusEnabled(false);
+        jScrollPane2.setViewportView(loadTA);
 
         loadfilebutton.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         loadfilebutton.setText("Load File");
+        loadfilebutton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         loadfilebutton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadfilebuttonActionPerformed(evt);
             }
         });
 
-        processbutton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        processbutton1.setText("Process");
+        processbtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        processbtn.setText("Process");
+        processbtn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        processbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                processbtnActionPerformed(evt);
+            }
+        });
+
+        TFadder.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        TFadder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TFadderActionPerformed(evt);
+            }
+        });
+
+        adderBT.setText("ADD");
+        adderBT.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        adderBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adderBTActionPerformed(evt);
+            }
+        });
+
+        clearTA.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        clearTA.setText("Clear table");
+        clearTA.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        clearTA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearTAActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(TFadder, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(adderBT, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(loadfilebutton, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(clearTA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(processbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(92, 92, 92)))
                 .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(101, 101, 101)
-                .addComponent(loadfilebutton, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 243, Short.MAX_VALUE)
-                .addComponent(processbutton1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(104, 104, 104))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(20, 20, 20)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(418, Short.MAX_VALUE)))
+                    .addContainerGap(412, Short.MAX_VALUE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(loadfilebutton, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                    .addComponent(processbutton1, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
-                .addGap(15, 15, 15))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(444, 444, 444)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(adderBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(TFadder))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(processbtn, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(clearTA, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(loadfilebutton, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
+                        .addGap(15, 15, 15))))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(10, 10, 10)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(89, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(145, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -137,7 +208,7 @@ public class calcuGUI extends javax.swing.JFrame {
 
     private void loadfilebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadfilebuttonActionPerformed
         // TODO add your handling code here:
-<<<<<<< HEAD
+
         JFileChooser chooseFile = new JFileChooser();
         String namer = new String ();
 //        chooseFile.getUI();
@@ -145,22 +216,24 @@ public class calcuGUI extends javax.swing.JFrame {
         chooseFile.getCurrentDirectory();
 //        chooseFile.
 //        File mewmew = new File (chooseFile.getSelectedFile());
-=======
 
-        jTextArea2.setText("");
+
+
         chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
         chooser.showOpenDialog(this);
       
->>>>>>> 708adfc12f4385f1fbcfb3d33d05a1c51cf624ed
+
         try {
                 FileReader reader = new FileReader(chooser.getSelectedFile());
                 BufferedReader br = new BufferedReader(reader);
                 String str;
                     while ((str = br.readLine()) != null) {
-                        jTextArea2.append(str + "\n\n\n");
-                        }        
+                        loadTA.append(str + "\n");
+                        Stringz.add(str);
+                        }       
+                    processbtn.setEnabled(true);
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(calcuGUI.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
@@ -168,6 +241,74 @@ public class calcuGUI extends javax.swing.JFrame {
                 }
         
     }//GEN-LAST:event_loadfilebuttonActionPerformed
+
+    private void processbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processbtnActionPerformed
+        // TODO add your handling code here:
+        
+        processTA.setText("");      
+               int x = 0;
+               while (x != Stringz.size()) {
+                   String y = Stringz.get(x).toString().replaceAll("[\t\n]", "");
+                        processTA.append("Line:\t" + y + "\n");
+                        processTA.append("Postfix:\t" + getPostFixString(y) + "\n");
+                        processTA.append("Result:\t" + calculate(y) + "\n\n");
+                        x++;
+                        }
+               processTA.append("---------------------------------------------------------------------------------");
+               
+               //where the magic begins bahahahahaha charot
+               //creates the output file
+         
+                try
+        {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(chooser.getCurrentDirectory(), true)); 
+            JTextArea textArea = new JTextArea(processTA.getText());
+            textArea.write(writer);
+            writer.close();
+             
+        }
+         
+        catch(FileNotFoundException exception)
+        {
+            String errorMessage = "The selected file doesn't exist.";
+            scrollPane(errorMessage);
+        } catch (IOException ex) {
+            Logger.getLogger(calcuGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+               
+               
+               
+    }//GEN-LAST:event_processbtnActionPerformed
+
+    private void TFadderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TFadderActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_TFadderActionPerformed
+
+    private void adderBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adderBTActionPerformed
+        // TODO add your handling code here:
+                
+        String z = TFadder.getText();
+        if ("".equals(z)) {
+            //do nothing duh
+        }
+        else {
+        Stringz.add(z);
+        loadTA.append(z + "\n");
+        processbtn.setEnabled(true);
+        TFadder.setText("");
+        }
+
+    }//GEN-LAST:event_adderBTActionPerformed
+
+    private void clearTAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearTAActionPerformed
+        // TODO add your handling code here:
+        
+        loadTA.setText("");
+        Stringz.clear();
+        processbtn.setEnabled(false);
+    }//GEN-LAST:event_clearTAActionPerformed
     
    
 
@@ -205,14 +346,17 @@ public class calcuGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField TFadder;
+    private javax.swing.JButton adderBT;
+    private javax.swing.JButton clearTA;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea loadTA;
     private javax.swing.JButton loadfilebutton;
-    private javax.swing.JButton processbutton1;
+    private javax.swing.JTextArea processTA;
+    private javax.swing.JButton processbtn;
     // End of variables declaration//GEN-END:variables
     
     
@@ -326,6 +470,10 @@ public class calcuGUI extends javax.swing.JFrame {
     public static int calculate(String s) {
         List<String> postFixString = getPostFixString(s);
         return calculatePostFix(postFixString);
+    }
+
+    private void scrollPane(String errorMessage) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
 
