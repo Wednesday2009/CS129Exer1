@@ -1,7 +1,7 @@
 package calcuGUI;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -12,7 +12,6 @@ import javax.swing.JFileChooser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import javax.swing.JTextArea;
 
 public class calcuGUI extends javax.swing.JFrame {
 
@@ -258,24 +257,20 @@ public class calcuGUI extends javax.swing.JFrame {
                
                //where the magic begins bahahahahaha charot
                //creates the output file
-         
-                try
-        {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(chooser.getCurrentDirectory(), true)); 
-            JTextArea textArea = new JTextArea(processTA.getText());
-            textArea.write(writer);
-            writer.close();
-             
-        }
-         
-        catch(FileNotFoundException exception)
-        {
-            String errorMessage = "The selected file doesn't exist.";
-            scrollPane(errorMessage);
-        } catch (IOException ex) {
+
+               try {
+                   String output = processTA.getText();
+                   File outputfile = new File ("algebra.out");
+            try (FileWriter powpow = new FileWriter (outputfile)) {
+                powpow.write(output);
+                powpow.flush();
+                powpow.close();
+                System.out.println("saved!");
+            }
+               } catch (IOException ex) {
             Logger.getLogger(calcuGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+               
                
                
                
@@ -470,10 +465,6 @@ public class calcuGUI extends javax.swing.JFrame {
     public static int calculate(String s) {
         List<String> postFixString = getPostFixString(s);
         return calculatePostFix(postFixString);
-    }
-
-    private void scrollPane(String errorMessage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
 
