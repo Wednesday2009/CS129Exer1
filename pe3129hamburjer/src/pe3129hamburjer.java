@@ -30,6 +30,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 
 /*
@@ -49,8 +50,9 @@ public class pe3129hamburjer extends javax.swing.JFrame {
      */
     
         JFileChooser chooser;
-        ArrayList Stringz = new ArrayList<>();
-        protected String newTabName = "New Tab";
+        ArrayList Stringz = new ArrayList<>();    
+        String filenameflop;
+        public int flagfile = 0;
 
         
     public pe3129hamburjer() {
@@ -69,10 +71,20 @@ public class pe3129hamburjer extends javax.swing.JFrame {
     
     //functions
     public void fileopener(){
+        
         JFileChooser jf = new JFileChooser();
         jf.setMultiSelectionEnabled(true);
         jf.showOpenDialog(null);
-        if(jf.getSelectedFiles() != null){
+            try {
+                //        consoleTA.setText("");
+//        consoleTA.append("FILE SUCCESSFULLY LOADED!");
+            restrict(jf);
+            } catch (IOException ex) {
+                Logger.getLogger(pe3129hamburjer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if(flagfile == 0){
+                if(jf.getSelectedFiles() != null ){
             ff=jf.getSelectedFiles();
             for(File item : ff){
             String filename = item.toString();
@@ -110,7 +122,12 @@ public class pe3129hamburjer extends javax.swing.JFrame {
             }
             }   
         }
-    }
+                else{
+                    consoleTA.append("FILE INVALID!");
+                }
+            }
+            
+           }
     public void newfile(){
         editTA.addKeyListener(new KeyListener() {
             @Override
@@ -174,16 +191,15 @@ public class pe3129hamburjer extends javax.swing.JFrame {
         if (edittab.getTabCount() > 0)
         {
             FileDialog fd = new FileDialog(new JFrame(), "Save File", FileDialog.SAVE);
-            fd.show();
             if (fd.getFile()!= null)
             {
                 String filename = fd.getDirectory()+ fd.getFile();
                 int sel = edittab.getSelectedIndex();
-                JTextPane textPane = (JTextPane)(((JScrollPane)edittab.getComponentAt(sel)).getViewport()).getComponent(0);
+                JTextPane currtextpane = (JTextPane)(((JScrollPane)edittab.getComponentAt(sel)).getViewport()).getComponent(0);
                 try
                 {
                     DataOutputStream d = new DataOutputStream(new FileOutputStream(filename));
-                    String line = textPane.getText();
+                    String line = currtextpane.getText();
                     d.writeBytes(line);
                     d.close();
                     labeller.setText(filename);
@@ -198,7 +214,7 @@ public class pe3129hamburjer extends javax.swing.JFrame {
                 {
                     System.out.println("File not found");
                 }
-                textPane.requestFocus();
+                currtextpane.requestFocus();
 
             }
         }
@@ -206,29 +222,29 @@ public class pe3129hamburjer extends javax.swing.JFrame {
     public void save(){
         if (edittab.getTabCount()>0){
             String filename= labeller.getText();
-            int sel = edittab.getSelectedIndex();
-            System.out.println(sel);
-            JTextPane textPane = (JTextPane)(((JScrollPane)edittab.getComponentAt(sel)).getViewport()).getComponent(0);
+            int currtab = edittab.getSelectedIndex();
+            System.out.println(currtab);
+            JTextPane currtextpane = (JTextPane)(((JScrollPane)edittab.getComponentAt(currtab)).getViewport()).getComponent(0);
             if(filename.contains("\\") || filename.contains("/")){
                 File f = new File(filename);
                 if (f.exists()){
                     try {
                         
                        DataOutputStream d = new DataOutputStream(new FileOutputStream(filename));
-                       String line = textPane.getText();
+                       String line = currtextpane.getText();
                        d.writeBytes(line);
                        d.close();
                        
-                        String tabtext = edittab.getTitleAt(sel);
+                        String tabtext = edittab.getTitleAt(currtab);
                         if(tabtext.contains("*")){
                             tabtext=tabtext.replace("*", "");
-                            edittab.setTitleAt(sel, tabtext);
+                            edittab.setTitleAt(currtab, tabtext);
                         }
                     } catch (FileNotFoundException ex) {
                        System.out.println("File not found!");
                     } catch (IOException ex) {
                         Logger.getLogger(pe3129hamburjer.class.getName()).log(Level.SEVERE, null, ex);
-                    }textPane.requestFocus();
+                    }currtextpane.requestFocus();
                 }
             }
             else if(filename.contains("File")){
@@ -351,9 +367,56 @@ public class pe3129hamburjer extends javax.swing.JFrame {
             labeller.setText("");
         }
     }
-    
-    
-    
+    public void restrict(JFileChooser chooser) throws FileNotFoundException, IOException{  
+        String file = chooser.getSelectedFile().getName();
+        
+        System.out.println("File name: " +file);
+        System.out.println("File ext: " +getFileExtension(file));
+      
+        if ("flop".equals(getFileExtension(file))) { 
+            consoleTA.setText("");
+            consoleTA.append("FILE SUCCESSFULLY OPENED!");
+            flagfile = 0;
+        }
+        else{
+            consoleTA.setText("");
+            consoleTA.append("INVALID FILE!");
+            flagfile = 1;
+        }
+    }
+    public String getFileExtension(String file) {
+        if (file.lastIndexOf(".") != -1 && file.lastIndexOf(".") != 0) {
+            return file.substring(file.lastIndexOf(".")+1);
+        }
+        else {
+            return "";
+        }
+    }
+    public void tableadder() {
+        cleartable();
+        DefaultTableModel model1 = (DefaultTableModel) vartable.getModel();
+        DefaultTableModel model2  = (DefaultTableModel) lextable.getModel();
+        Object rowData[] = new Object [4];
+
+        for (int x=0; x < tokenTYPE.size(); x++) {
+            rowData[0] = tokenTYPE.get(x);
+            rowData[1] = words.get(x);
+            model2.addRow(rowData);
+        }
+        //SAVE FOR VARIABLE
+//        for (){
+//            
+//            model1.addRow(rowData);
+//        }
+    }
+    public void cleartable() {
+            // Clears table contents
+        DefaultTableModel model1 = (DefaultTableModel) vartable.getModel();
+        model1.setRowCount(0);
+        
+        DefaultTableModel model2 = (DefaultTableModel) lextable.getModel();
+        model2.setRowCount(0);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -623,7 +686,8 @@ public class pe3129hamburjer extends javax.swing.JFrame {
     }//GEN-LAST:event_NewActionPerformed
 
     private void OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenActionPerformed
-        // TODO add your handling code here:
+
+                // TODO add your handling code here:
         fileopener();
     }//GEN-LAST:event_OpenActionPerformed
 
