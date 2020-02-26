@@ -187,15 +187,16 @@ public class pe3129hamburjer extends javax.swing.JFrame {
         count++;
     }
     public void saveas(){
-
         if (edittab.getTabCount() > 0)
         {
             FileDialog fd = new FileDialog(new JFrame(), "Save File", FileDialog.SAVE);
+            fd.show();
             if (fd.getFile()!= null)
             {
                 String filename = fd.getDirectory()+ fd.getFile();
-                int sel = edittab.getSelectedIndex();
-                JTextPane currtextpane = (JTextPane)(((JScrollPane)edittab.getComponentAt(sel)).getViewport()).getComponent(0);
+                fd.setFile("*.flop");
+                int currtab = edittab.getSelectedIndex();
+                JTextPane currtextpane = (JTextPane)((edittab.getComponentAt(currtab)));
                 try
                 {
                     DataOutputStream d = new DataOutputStream(new FileOutputStream(filename));
@@ -205,7 +206,7 @@ public class pe3129hamburjer extends javax.swing.JFrame {
                     labeller.setText(filename);
 
                     String file = filename.substring(filename.lastIndexOf("\\") + 1);
-                    edittab.setTitleAt(sel, file);
+                    edittab.setTitleAt(currtab, file);
                     
                     setTitle("" + file);
 
@@ -398,11 +399,11 @@ public class pe3129hamburjer extends javax.swing.JFrame {
         DefaultTableModel model2  = (DefaultTableModel) lextable.getModel();
         Object rowData[] = new Object [4];
 
-        for (int x=0; x < tokenTYPE.size(); x++) {
-            rowData[0] = tokenTYPE.get(x);
-            rowData[1] = words.get(x);
-            model2.addRow(rowData);
-        }
+//        for (int x=0; x < tokenTYPE.size(); x++) {
+//            rowData[0] = tokenTYPE.get(x);
+//            rowData[1] = words.get(x);
+//            model2.addRow(rowData);
+//        }
         //SAVE FOR VARIABLE
 //        for (){
 //            
